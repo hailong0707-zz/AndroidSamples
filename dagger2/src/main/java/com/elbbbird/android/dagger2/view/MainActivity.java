@@ -1,17 +1,32 @@
 package com.elbbbird.android.dagger2.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.elbbbird.android.dagger2.R;
+import com.elbbbird.android.dagger2.base.BaseActivity;
+import com.elbbbird.android.dagger2.base.DaggerApplication;
+import com.elbbbird.android.dagger2.model.Student;
+import com.elbbbird.android.dagger2.presenter.MainPresenter;
+import com.elbbbird.android.dagger2.view.dagger.component.DaggerMainActivityComponent;
+import com.elbbbird.android.dagger2.view.dagger.module.MainActivityModule;
 
-public class MainActivity extends AppCompatActivity {
+import javax.inject.Inject;
+
+public class MainActivity extends BaseActivity {
+
+    @Inject
+    MainPresenter mPresenter;
+    @Inject
+    Student mStudent;
+    @Inject
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +39,20 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, mPresenter.getStudentName(mStudent), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                mPresenter.getContext(mContext);
             }
         });
+    }
+
+    @Override
+    protected void setActivityComponent() {
+        DaggerMainActivityComponent.builder()
+                .daggerComponent(DaggerApplication.getDaggerComponent())
+                .mainActivityModule(new MainActivityModule(this))
+                .build()
+                .inject(this);
     }
 
     @Override
