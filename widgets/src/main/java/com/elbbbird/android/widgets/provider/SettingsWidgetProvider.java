@@ -25,7 +25,7 @@ public class SettingsWidgetProvider extends AppWidgetProvider {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_settings);
-            views.setOnClickPendingIntent(R.id.main_btn, pendingIntent);
+            views.setOnClickPendingIntent(R.id.main_iv_settings_vpn, pendingIntent);
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
